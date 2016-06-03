@@ -99,6 +99,8 @@ class Corpus(object):
 		to classify a document, given the words in it
 		@return (categoryName, estimation)
 		"""
+		# pre-processing: ignore words with low collection frequency
+		# words = [w for w in words if self.countWord(w) > 15] # will delete those <= 15
 		estimation = float("-INF") # initialization
 		categoryName = ""          # initialization
 		for c in self.categories:
@@ -196,7 +198,7 @@ class Category(object):
 		@globalVocabSize the vocabulary size of corpus, for smoothing
 		@return the probability
 		"""
-		return float(self.countWord(word) + 1) / float(self.totalWordCount + globalVocabSize)
+		return float(self.countWord(word) + 0.5) / float(self.totalWordCount + globalVocabSize * 0.5)
 
 
 class Document(object):
@@ -245,7 +247,7 @@ def extractWordsFromFile(filePath):
 	@return the words found
 	"""
 	with open(filePath, "r") as f:
-		return re.findall(r'[a-zA-Z]+[a-zA-Z0-9\'\-]*', f.read())
+		return re.findall(r'[a-zA-Z]+[a-zA-Z0-9\'\-@]*', f.read())
 	return [] # default return
 
 def main():
