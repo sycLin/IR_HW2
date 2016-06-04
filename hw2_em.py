@@ -21,7 +21,7 @@ def converge(newResult, oldResult):
 
 def main():
 	# check argument count
-	if len(sys.argv) != 4:
+	if len(sys.argv) != 4 and len(sys.argv) != 5:
 		ErrorExit("wrong argument count")
 
 	# check arguments
@@ -31,13 +31,22 @@ def main():
 	if not (os.path.isdir(trainDir) and os.path.isdir(unlabelDir) and os.path.isdir(testDir)):
 		ErrorExit("incorrect argument(s) given")
 
+	try:
+		labelDataSize = int(sys.argv[4])
+	except:
+		labelDataSize = None
+
 	# build corpus
 	myCorpus = Corpus()
 	myCorpus.batchAddCategories(os.listdir(trainDir)) # add categories
 	for cname in myCorpus.getCategoryNames():
+		counter = 0
 		for dname in os.listdir(os.path.join(trainDir, cname)):
 			dpath = os.path.join(os.path.join(trainDir, cname), dname)
 			myCorpus.buildVocabulary(cname, dname, extractWordsFromFile(dpath))
+			counter += 1
+			if labelDataSize != None and counter >= labelDataSize: # actually will break when == labelDataSize
+				break
 
 	# EM algorithm
 	#

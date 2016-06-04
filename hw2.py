@@ -253,7 +253,7 @@ def extractWordsFromFile(filePath):
 def main():
 
 	# check argument
-	if len(sys.argv) != 3:
+	if len(sys.argv) != 3 and len(sys.argv) != 4:
 		ErrorExit("wrong argument count");
 
 	# build corpus
@@ -261,14 +261,22 @@ def main():
 
 	# build categories by listing directory: sys.argv[1]
 	trainDir = sys.argv[1]
+	try:
+		labelDataSize = int(sys.argv[3])
+	except:
+		labelDataSize = None
 	if not os.path.isdir(trainDir):
 		ErrorExit("argument <Train_dir>: %s is not a directory" % (trainDir))
 	myCorpus.batchAddCategories(os.listdir(trainDir))
 	# loop through all documents and build vocabulary
 	for categoryName in os.listdir(trainDir):
+		counter = 0
 		for docName in os.listdir(os.path.join(trainDir, categoryName)):
 			doc_path = os.path.join(os.path.join(trainDir, categoryName), docName)
 			myCorpus.buildVocabulary(categoryName, docName, extractWordsFromFile(doc_path))
+			counter += 1
+			if labelDataSize != None and counter >= labelDataSize:
+				break
 	# print for debug
 	# print myCorpus
 	# print "the word 'steven' has collection freq = %d" % (myCorpus.countWord("steven"))
