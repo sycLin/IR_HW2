@@ -34,6 +34,17 @@ def main():
 	#     res = tmp_res
 	#     tmpCorpus = myCorpus + tmp_res
 	#     tmpCorpus.classify() => tmp_res
+	
+	# read unlabeled documents
+	unlabelDocs = {} # key: docName, value: words
+	for dname in os.listdir(unlabelDir):
+		unlabelDocs[dname] = extractWordsFromFile(os.path.join(unlabelDir, dname))
+	# classify unlabelDocs
+	result = {}
+	for dname, words in unlabelDocs.iteritems():
+		result[dname] = myCorpus.classify(words)
+	# add to myCorpus as tmpCorpus
+	tmpCorpus = deepcopy(myCorpus)
 	pass
 
 
