@@ -12,13 +12,11 @@ def converge(newResult, oldResult):
 	    c_new == c_old, and
 	    abs(est_new - est_old) <= 100
 	"""
-	# key: documentName, value: (cName, estimation)
-	for dname, detail in oldResult.iteritems():
-		try:
-			if detail[0] != newResult[dname][0] or abs(newResult[dname][1] / detail[1] - 1.0) > 0.001:
-				return False
-		except:
-			return False
+
+	old_sum = sum([detail[1] for dname, detail in oldResult.iteritems()])
+	new_sum = sum([detail[1] for dname, detail in newResult.iteritems()])
+	if abs(new_sum / old_sum - 1.0) > 0.001:
+		return False
 	return True
 
 def main():
@@ -84,8 +82,8 @@ def main():
 		for dname, words in unlabelDocs.iteritems():
 			tmp_result[dname] = tmpCorpus.classify(words)
 		iter_counter += 1
-		print >> sys.stderr, "iteration #%d" % (iter_counter)
-	print >> sys.stderr, "total iteration count = %d" % (iter_counter)
+		# print >> sys.stderr, "iteration #%d" % (iter_counter)
+	# print >> sys.stderr, "total iteration count = %d" % (iter_counter)
 
 
 	# finish EM, and tmpCorpus is with adjusted parameters
