@@ -1,0 +1,14 @@
+
+# default values
+TRAIN_DIR=
+UNLABEL_DIR=
+TEST_DIR=
+LABEL_SIZE=
+OUT_FILE=
+
+all: NBC EM
+
+NBC:
+	@./hw2.py $(TRAIN_DIR) $(TEST_DIR) $(LABEL_SIZE) > $(OUT_FILE)
+EM:
+	@./hw2_em.py $(TRAIN_DIR) $(UNLABEL_DIR) $(TEST_DIR) $(LABEL_SIZE) > $(OUT_FILE)
