@@ -38,7 +38,7 @@ def evaluate(true_path, your_path):
 		except:
 			print >> sys.stderr, "(%s) cannot parse this line: %s" % (your_path, line)
 	# matching
-	res = {'correct': 0, 'incorrect': 0}
+	res = {'correct': 0, 'incorrect': 0, 'ratio': 0.0}
 	for k, v in truth.iteritems():
 		try:
 			your_v = yours[k]
@@ -48,6 +48,7 @@ def evaluate(true_path, your_path):
 				res['incorrect'] += 1
 		except:
 			print >> sys.stderr, "(%s) didn't provide the answer of: %s" % (your_path, k)
+	res['ratio'] = float(res['correct']) / float(res['correct'] + res['incorrect'])
 	return res
 
 if __name__ == "__main__":
